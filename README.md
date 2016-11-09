@@ -9,4 +9,4 @@ an image. It also will be able to find the message from two given images.
 
 Yet you may only use the -i and -m options in that way:
 
-*steganoFriend -i inputFile -m message*
+*./steganoFriend.py -i inputFile -m message*
