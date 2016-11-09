@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from PIL import Image
-import sys
+import sys,getopt
 
 
 def RGBToInt(rgb):
@@ -16,8 +16,13 @@ def intToRGB(number):
     return (r, g, b)
 
 
-for infile in sys.argv[1:]:
-    im = Image.open(infile)
+args = len(sys.argv)
+
+i = 1
+while i < args:
+    arg = args[i]
+    value = args[i + 1]
+    im = Image.open(value)
     pix = im.load()
     size = im.size
     img = Image.new('RGB', size, "black")
@@ -27,5 +32,25 @@ for infile in sys.argv[1:]:
         for y in range(im.size[1]):
             binary = bin(RGBToInt((pix[x, y]))[2:].zfill(8))
             print(binary)
+    i += 1
+    img.show()
 
-img.show()
+
+def main(argv):
+    inputfile = ''
+    outputfile = ''
+    try:
+        opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
+    except getopt.GetoptError:
+        print('test.py -i <inputfile> -o <outputfile>')
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print('test.py -i <inputfile> -o <outputfile>')
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            inputfile = arg
+        elif opt in ("-o", "--ofile"):
+            outputfile = arg
+    print(('Input file is "', inputfile))
+    print(('Output file is "', outputfile))
