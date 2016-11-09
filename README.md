@@ -8,4 +8,5 @@ an image. It also will be able to find the message from two given images.
 ## SteganoFriend usage
 
 Yet you may only use the -i and -m options in that way:
-*steganoFriend -i <inputFile> -m <message>*
+
+*steganoFriend -i inputFile -m message*
