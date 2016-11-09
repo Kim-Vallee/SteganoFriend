@@ -3,6 +3,7 @@
 import sys
 import getopt
 import modules
+import os.path
 
 
 def main(argv):
@@ -24,13 +25,16 @@ def main(argv):
             infile = arg
         elif opt in ("-m", "--message"):  # On récupère le message à encoder
             message = arg
+
     try:  # Si jamais l'utilisateur ne met que le message ou que le fichier...
         if message == '' or infile == '':
             raise getopt.GetoptError  # On lève une erreur
-        modules.encodeMessageInFile(infile, message)
+        print(message)
     except:
         print(helpMessage)
         sys.exit(2)
+
+    modules.encodeMessageInFile(infile, message)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
