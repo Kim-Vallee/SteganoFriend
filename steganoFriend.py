@@ -1,40 +1,33 @@
 #!/usr/bin/env python3
 
 import sys
-import getopt
+import argparse
 import modules
 import os.path
 
+parser = argparse.ArgumentParser(description="This program hides a message\
+                                              into an RGB image")
 
 def main(argv):
-    message = ''  # Plus facile à vérifier si jamais l'option est inutilisé
-    infile = ''
-    helpMessage = "test.py -i <inputfile> -m <message>"  # Message d'erreur
-    try:
-        # On récupère les arguments et leur valeurs
-        opts, args = getopt.getopt(argv, "hi:m:", ["ifile=", "message="])
-    except getopt.GetoptError:
-        # Mauvaise utilisation des arguments
-        print(helpMessage)
-        sys.exit(2)
-    for opt, arg in opts:  # On parcours les arguments
-        if opt == '-h':  # Message d'aide demandé
-            print(helpMessage)
-            sys.exit()
-        elif opt in ("-i", "--ifile"):  # On récupère le nom du fichier
-            infile = arg
-        elif opt in ("-m", "--message"):  # On récupère le message à encoder
-            message = arg
+    bgroup = parser.add_argument_group("Hide message with LSB method")
+    bgroup.add_argument('-image', help='Provide the original image')
+    bgroup.add_argument('-message', help='The message to hide in the image')
+    bgroup.add_argument('-output', help='Provide the name of the output')
+    bgroup.add_argument('-format', help='Provide the output format of the file, default is jpeg')
+    bgroup = parser.add_argument_group("Reveal message in a picture")
+    bgroup.add_argument('-stegfile', help='Provide the steganographic image')
+    bgroup.add_argument('-out', help='Provide output file: default just print')
 
-    try:  # Si jamais l'utilisateur ne met que le message ou que le fichier...
-        if message == '' or infile == '':
-            raise getopt.GetoptError  # On lève une erreur
-        print(message)
-    except:
-        print(helpMessage)
-        sys.exit(2)
+    args = parser.parse_args(argv[1:])
 
-    modules.encodeMessageInFile(infile, message)
+    arguments = len(argv)
+
+    if arguments == 7:
+        modules.encodeMessageInFile(args.image, args.message, args.output, "jpg")
+    elif arguments == 3:
+        print(modules.decodeMessage(args.stegfile))
+    else:
+        print("Usage: '", argv[0], "-h' for help", "\n", args)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main(sys.argv)
